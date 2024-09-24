@@ -1,0 +1,111 @@
+import random
+
+def choose_word():
+    words = ["python", "hangman", "challenge", "programming", "computer", "development"]
+    return random.choice(words)
+
+def display_hangman(tries):
+    stages = [
+        """
+           -----
+           |   |
+           |   O
+           |  /|\\
+           |  / \\
+           |
+        """,
+        """
+           -----
+           |   |
+           |   O
+           |  /|\\
+           |  /
+           |
+        """,
+        """
+           -----
+           |   |
+           |   O
+           |  /|
+           |
+           |
+        """,
+        """
+           -----
+           |   |
+           |   O
+           |
+           |
+           |
+        """,
+        """
+           -----
+           |   |
+           |
+           |
+           |
+           |
+        """,
+        """
+           -----
+           |
+           |
+           |
+           |
+           |
+        """,
+        """
+           |
+           |
+           |
+           |
+           |
+           |
+        """
+    ]
+    return stages[tries]
+
+def play_hangman():
+    word = choose_word()
+    guessed_letters = set()
+    word_completion = "_" * len(word)
+    tries = 6
+    guessed = False
+
+    print("Let's play Hangman!")
+    print(display_hangman(tries))
+    print(word_completion)
+
+    while not guessed and tries > 0:
+        guess = input("Please guess a letter: ").lower()
+
+        if len(guess) != 1 or not guess.isalpha():
+            print("Invalid input. Please enter a single letter.")
+            continue
+        
+        if guess in guessed_letters:
+            print("You've already guessed that letter.")
+            continue
+
+        guessed_letters.add(guess)
+
+        if guess in word:
+            print(f"Good guess! {guess} is in the word.")
+            word_completion = "".join([letter if letter in guessed_letters else "_" for letter in word])
+        else:
+            tries -= 1
+            print(f"Sorry, {guess} is not in the word. You have {tries} tries left.")
+
+        print(display_hangman(tries))
+        print(word_completion)
+
+        if "_" not in word_completion:
+            guessed = True
+
+    if guessed:
+        print("Congratulations! You've guessed the word:", word)
+    else:
+        print("Sorry, you've run out of tries. The word was:", word)
+
+if __name__ == "__main__":
+    play_hangman()
