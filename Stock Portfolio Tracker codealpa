@@ -1,0 +1,79 @@
+
+class Stock:
+    def __init__(self, symbol, name, quantity, price):
+        self.symbol = symbol
+        self.name = name
+        self.quantity = quantity
+        self.price = price
+
+    def value(self):
+        return self.quantity * self.price
+
+
+class Portfolio:
+    def __init__(self):
+        self.stocks = {}
+
+    def add_stock(self, symbol, name, quantity, price):
+        self.stocks[symbol] = Stock(symbol, name, quantity, price)
+
+    def remove_stock(self, symbol):
+        if symbol in self.stocks:
+            del self.stocks[symbol]
+        else:
+            print("Stock not found in portfolio.")
+
+    def update_price(self, symbol, price):
+        if symbol in self.stocks:
+            self.stocks[symbol].price = price
+        else:
+            print("Stock not found in portfolio.")
+
+    def total_value(self):
+        return sum(stock.value() for stock in self.stocks.values())
+
+    def print_portfolio(self):
+        print("Stock Portfolio:")
+        for stock in self.stocks.values():
+            print(f"{stock.name} ({stock.symbol}): {stock.quantity} @ ${stock.price:.2f} = ${stock.value():.2f}")
+
+
+def main():
+    portfolio = Portfolio()
+
+    while True:
+        print("\nStock Portfolio Tracker")
+        print("1. Add Stock")
+        print("2. Remove Stock")
+        print("3. Update Price")
+        print("4. Print Portfolio")
+        print("5. Exit")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            symbol = input("Enter stock symbol: ")
+            name = input("Enter stock name: ")
+            quantity = int(input("Enter quantity: "))
+            price = float(input("Enter price: "))
+            portfolio.add_stock(symbol, name, quantity, price)
+        elif choice == "2":
+            symbol = input("Enter stock symbol: ")
+            portfolio.remove_stock(symbol)
+        elif choice == "3":
+            symbol = input("Enter stock symbol: ")
+            price = float(input("Enter new price: "))
+            portfolio.update_price(symbol, price)
+        elif choice == "4":
+            portfolio.print_portfolio()
+            print(f"Total Portfolio Value: ${portfolio.total_value():.2f}")
+        elif choice == "5":
+            break
+        else:
+            print("Invalid option. Please choose again.")
+
+
+if __name__ == "__main__":
+    main()
+
+
